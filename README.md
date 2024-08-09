@@ -5,8 +5,21 @@
 ```php
 $this->cache = new VCache($this);
 $this->getScheduler()->scheduleRepeatingTask(new ClosureTask(function (): void {
-    $this->cache->doCache("opdiff", function (): string {
-        return "opdiff";
+
+    // This is fast query processing!
+    $this->cache->doCache("This is Key A", function (): string {
+        sleep(3); // Let's say something processed takes 3s to complete!
+        return "result_data"; // This is the processing of the query or something that you want to return when the processing is done here
+    }, function (string $data): void {
+        $this->getServer()->broadcastMessage($data);
+    },
+    true,
+    10);
+
+    // This is anti-duplicate handling in addition to fast querying!
+    $this->cache->doNoSpamCache("This is Key B", function (): string {
+        sleep(3); // Let's say something processed takes 3s to complete!
+        return "result_data"; // This is the processing of the query or something that you want to return when the processing is done here
     }, function (string $data): void {
         $this->getServer()->broadcastMessage($data);
     },
