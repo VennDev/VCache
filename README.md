@@ -17,7 +17,7 @@ $this->getScheduler()->scheduleRepeatingTask(new ClosureTask(function (): void {
     10);
 
     // This is anti-duplicate handling in addition to fast querying!
-    $this->cache->doNoSpamCache("This is Key B", function (): string {
+    $this->cache->doNoSpamCache(["This is Key B", "ASDASDAS", "ASDASD], function (): string {
         sleep(3); // Let's say something processed takes 3s to complete!
         return "result_data"; // This is the processing of the query or something that you want to return when the processing is done here
     }, function (string $data): void {
